@@ -10,7 +10,36 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+<!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
+
+        <!-- Custom Themes -->
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
+        <item name="android:windowBackground">@drawable/background</item>
+
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+
+        <item name="bottomNavigationStyle">@style/Widget.BackBlog.BottomNavigationView</item>
+        <item name="android:navigationBarColor">@color/bottomnav</item>
+    </style>
+
+    <style name="MyActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Solid">
+        <!-- Explicitly set background to transparent -->
+        <item name="background">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.BackBlog.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/bottomnav</item>
+        <item name="itemPaddingTop">16dp</item>
+        <item name="itemPaddingBottom">8dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemIconTint">@color/bottomnav_item_colors</item>
     </style>
 </resources>
