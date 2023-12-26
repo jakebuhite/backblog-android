@@ -4,30 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
-
-    <ImageView
-        android:id="@+id/movie_poster_placeholder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="H,16:9"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.35"
-        android:src="@drawable/img_placeholder"
-        android:scaleType="centerCrop" />
+    tools:context=".ui.home.HomeFragment"
+    android:id="@+id/fragment_home_parent">
 
     <TextView
-        android:id="@+id/movie_info"
-        android:layout_width="0dp"
+        android:id="@+id/from_log_text_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Some more things go here, like the title and the release year"
-        app:layout_constraintTop_toBottomOf="@id/movie_poster_placeholder"
+        android:text="From Personal Log"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/up_next_movie_poster"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_placeholder_poster"
+        app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/from_log_text_view"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <TextView
+        android:id="@+id/up_next_movie_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tenet"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginLeft="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_next_movie_poster" />
+
+    <TextView
+        android:id="@+id/up_next_movie_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PG-13"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/light_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_next_movie_title" />
+
+    <TextView
+        android:id="@+id/up_next_movie_release_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:text="2020"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/light_grey"
+        app:layout_constraintEnd_toEndOf="@id/up_next_movie_title"
+        app:layout_constraintTop_toTopOf="@id/up_next_movie_rating"
         />
-    
+
+    <ImageView
+        android:id="@+id/image_view_check_mark"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/button_mark_watched"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="@id/up_next_movie_title"
+        app:layout_constraintBottom_toBottomOf="@id/up_next_movie_rating"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/my_logs"
         android:layout_width="wrap_content"
@@ -36,23 +86,31 @@
         android:textColor="@color/white"
         android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/movie_info"
-        android:layout_marginTop="30dp"/>
-    <Button
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/up_next_movie_rating"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
         android:id="@+id/button_add_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/my_logs"
-        app:layout_constraintTop_toBottomOf="@id/movie_info"
-        android:layout_marginTop="30dp"
-        android:text="Add Log"/>
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/button_add_log"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/my_logs"
+        app:layout_constraintTop_toTopOf="@id/my_logs"
+        app:layout_constraintStart_toStartOf="@id/image_view_check_mark"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_logs_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/my_logs"
         app:layout_constraintBottom_toBottomOf="parent"
         android:scrollbars="none" />

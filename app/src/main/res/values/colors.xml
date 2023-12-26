@@ -14,4 +14,6 @@
     <color name="bottomnav">#232323</color>
     <color name="bottomnav_icon">#9F9F9F</color>
     <color name="bottomnav_icon_selected">@color/white</color>
+
+    <color name="light_grey">#A7A9AB</color>
 </resources>

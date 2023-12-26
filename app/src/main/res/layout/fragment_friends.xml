@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.notifications.NotificationsFragment">
+    tools:context=".ui.friends.FriendsFragment"
+    android:id="@+id/fragment_friends_parent">
 
     <TextView
         android:id="@+id/text_notifications"

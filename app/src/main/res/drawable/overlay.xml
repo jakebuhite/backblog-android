@@ -1,0 +1,4 @@
+<!-- res/drawable/overlay.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#99000000"/> <!-- AA for alpha, 000000 for black color -->
+</shape>
