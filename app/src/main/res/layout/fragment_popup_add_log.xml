@@ -4,16 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@android:color/white"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:id="@+id/popup_add_log_parent">
 
     <TextView
+        android:id="@+id/new_log_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Log"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/new_log_name_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"/>
@@ -26,18 +28,18 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <!-- This LinearLayout acts as a placeholder for collaborator list items -->
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/collaboratorsListLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="8dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp">-->
         <!-- Dynamically add collaborators here -->
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <Button
-        android:id="@+id/addCollaboratorButton"
+        android:id="@+id/add_collaborator_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Collaborators"

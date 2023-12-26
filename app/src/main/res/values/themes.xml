@@ -37,4 +37,5 @@
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconTint">@color/bottomnav_item_colors</item>
     </style>
+
 </resources>

@@ -1,10 +1,12 @@
+
+
 package com.tabka.backblog.ui.home
 
-import GridAdapter
-import ImageItem
-import android.app.Activity
-import android.content.Intent.getIntent
+import android.annotation.SuppressLint
+import com.tabka.backblog.ui.Adapters.GridAdapter
+import com.tabka.backblog.ui.Adapters.ImageItem
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,37 +16,35 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tabka.backblog.R
 import com.tabka.backblog.databinding.FragmentHomeBinding
-import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import androidx.core.app.ActivityCompat.recreate
+import android.widget.ScrollView
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.tabka.backblog.MainActivity
+import com.tabka.backblog.ui.Adapters.DragManagerAdapter
+import com.tabka.backblog.ui.Utilities.JsonUtility
+import com.tabka.backblog.ui.Utilities.DesignUtility
+import java.util.UUID
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
+
     private val TAG = "HomeFragment"
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-
     // Assuming you have a data source for your RecyclerView
-    private val myDataset: List<ImageItem> = emptyList()
-/*    private val myDataset = listOf(
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-        ImageItem(R.drawable.img_placeholder),
-    )*/
+    private var myDataset: List<ImageItem> = emptyList()
+    private val jsonUtility = JsonUtility()
+    private val designUtility = DesignUtility()
 
     // Adapter for the RecyclerView
     private lateinit var gridAdapter: GridAdapter
 
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,62 +57,111 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
 
-        // Add Log Popup
-        val addLogButton: Button = root.findViewById(R.id.button_add_log);
+        // Add Log PopUp Menu
+        val addLogButton: ImageView = root.findViewById(R.id.button_add_log);
         addLogButton.setOnClickListener {
             showAddLogPopUpMenu();
         }
 
-        // Dynamically add each log to home page
-        val recyclerView: RecyclerView = binding.myLogsRecycler // Make sure you have a RecyclerView in your fragment_home.xml with this ID
-        recyclerView.layoutManager = object : GridLayoutManager(requireContext(), 2) {
+        // If logged in - set myDataset with data from db
+        // TODO "Check if user is authenticated"
+        // var logsMap: Map<String, FireBase.LogObject> = emptyMap()
+        // If not logged in
+        var logsMap: Map<String, JsonUtility.UserLog> = emptyMap()
+
+        val logs = jsonUtility.readFromFile(requireContext())
+        logsMap = logs.associateBy { it.id }
+        myDataset = logs.map { log ->
+            // Set default image if can't get image from TMDB
+            val imageResId = R.drawable.img_placeholder_log_batman
+            ImageItem(id=log.id, image=imageResId, log_name = log.name, priority = log.priority)
+        }.sortedBy { it.priority }
+
+
+
+        val numColumns = 2
+
+        // Disable scrolling on the recycler view
+        val recyclerView: RecyclerView = binding.myLogsRecycler
+        recyclerView.layoutManager = object : GridLayoutManager(requireContext(), numColumns) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable scrolling
             }
         }
-        gridAdapter = GridAdapter(myDataset) { holder ->
+
+        // Dynamically add each log to home page
+        gridAdapter = GridAdapter(myDataset) { holder, position ->
+            val layoutParamsImage = holder.imageView.layoutParams
+            val layoutParamsCard = holder.cardView.layoutParams as ViewGroup.MarginLayoutParams
+
+            // Define margins based on position
+            if (position % 2 == 0) {
+                layoutParamsCard.rightMargin = designUtility.dpToPx(holder.imageView.context, 5)
+                layoutParamsCard.leftMargin = 0
+            } else {
+
+                layoutParamsCard.leftMargin = designUtility.dpToPx(holder.imageView.context, 5)
+                layoutParamsCard.rightMargin = 0
+            }
+
+            // Make the logs square
             val width = holder.imageView.resources.displayMetrics.widthPixels / 2
-            val layoutParams = holder.imageView.layoutParams
-            layoutParams.height = width
-            holder.imageView.layoutParams = layoutParams
+            layoutParamsImage.height = width
+            holder.imageView.layoutParams = layoutParamsImage
+
+            // Set the TextWidth to wrap
+            holder.cardView.post {
+                val maxWidth = (holder.cardView.width * 0.75).toInt()
+                holder.textView.maxWidth = maxWidth
+            }
+
         }
         recyclerView.adapter = gridAdapter
 
+
+        // Make items draggable
+        val callback = DragManagerAdapter(gridAdapter, recyclerView) { imageItems ->
+            val logs = imageItems.mapNotNull { item ->
+                val log = logsMap[item.id] ?: return@mapNotNull null
+                log.copy(priority = item.priority)
+            }
+            // If not logged in
+            jsonUtility.overwriteJSON(requireContext(), logs)
+            //else send the list to firebase to update the priorities (should only need to send ID and priority)
+        }
+
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
 
         return root
     }
 
     private fun showAddLogPopUpMenu() {
-        val popupView = layoutInflater.inflate(R.layout.fragment_popup_add_log, null)
-        val width = LinearLayout.LayoutParams.MATCH_PARENT
-        val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val focusable = true
+        val addLogPopUpFragment = AddLogPopUpFragment()
+        addLogPopUpFragment.listener = this
+        addLogPopUpFragment.show(parentFragmentManager, "AddLogPopUpMenu")
+    }
 
-        // Create the popup window
-        val popupWindow = PopupWindow(popupView, width, height, focusable)
+    override fun onDialogCreateButtonClick(logName: String) {
+        // Implement what should happen when the button is clicked
+        Log.d(TAG, "Create log for $logName")
 
-        popupWindow.animationStyle = R.style.PopupWindowOpenAnimation
-        // Show the popup window
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0)
+        // If not logged in, write to JSON file
+        val id = UUID.randomUUID().toString()
+        val priority = (myDataset.maxByOrNull { it.priority }?.priority ?: 0) + 1
+        val log = JsonUtility.UserLog(
+            id = id,
+            name = logName,
+            is_visible = true,
+            movie_ids = emptyList(),
+            watched_ids = emptyList(),
+            priority = priority,
+        )
 
-        // Cancel button is pressed
-        popupView.findViewById<Button>(R.id.cancel_button).setOnClickListener {
-            popupWindow.animationStyle = R.style.PopupWindowCloseAnimation
-            popupWindow.dismiss()
-        }
+        jsonUtility.appendToFile(requireContext(), log)
+        activity?.recreate()
 
-        // Create button is pressed
-        popupView.findViewById<Button>(R.id.create_button).setOnClickListener {
-            val logName = popupView.findViewById<EditText>(R.id.nameEditText).text.toString()
-            if (logName.isNotBlank()) {
-                Log.d(TAG, logName)
-                popupWindow.dismiss()
-                activity?.recreate()
-            } else {
-
-            }
-
-        }
+        // else create log in firebase
     }
 
     override fun onDestroyView() {
@@ -120,3 +169,4 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
