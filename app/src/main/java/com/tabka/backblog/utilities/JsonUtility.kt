@@ -1,4 +1,4 @@
-package com.tabka.backblog.ui.Utilities
+package com.tabka.backblog.utilities
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson

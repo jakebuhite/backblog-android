@@ -3,8 +3,8 @@
 package com.tabka.backblog.ui.home
 
 import android.annotation.SuppressLint
-import com.tabka.backblog.ui.Adapters.GridAdapter
-import com.tabka.backblog.ui.Adapters.ImageItem
+import com.tabka.backblog.adapters.GridAdapter
+import com.tabka.backblog.adapters.ImageItem
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,18 +16,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tabka.backblog.R
 import com.tabka.backblog.databinding.FragmentHomeBinding
-import android.view.Gravity
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.ScrollView
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.tabka.backblog.MainActivity
-import com.tabka.backblog.ui.Adapters.DragManagerAdapter
-import com.tabka.backblog.ui.Utilities.JsonUtility
-import com.tabka.backblog.ui.Utilities.DesignUtility
+import com.tabka.backblog.adapters.DragManagerAdapter
+import com.tabka.backblog.utilities.JsonUtility
+import com.tabka.backblog.utilities.DesignUtility
 import java.util.UUID
 
 class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {

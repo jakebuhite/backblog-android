@@ -38,9 +38,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-/*        val scrollView = binding.mainScrollView
-        Log.d(TAG, "ScrollView: $scrollView")*//*        val scrollView = binding.mainScrollView
-        Log.d(TAG, "ScrollView: $scrollView")*/
 
         // Set up the navigation bar
         val navView: BottomNavigationView = binding.navView

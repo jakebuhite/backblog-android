@@ -2,6 +2,7 @@ package com.tabka.backblog.ui.login
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.tabka.backblog.R
 
 class LoginActivity : AppCompatActivity() {
 
