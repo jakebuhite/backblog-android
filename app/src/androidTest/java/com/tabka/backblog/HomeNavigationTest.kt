@@ -1,23 +1,13 @@
 package com.tabka.backblog
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.tabka.backblog.ui.Utilities.JsonUtility
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matcher
-import org.hamcrest.number.OrderingComparison.greaterThan
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
