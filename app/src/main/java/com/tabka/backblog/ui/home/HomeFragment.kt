@@ -19,6 +19,7 @@ import com.tabka.backblog.databinding.FragmentHomeBinding
 import android.widget.ImageView
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.tabka.backblog.adapters.DragManagerAdapter
+import com.tabka.backblog.models.UserLog
 import com.tabka.backblog.utilities.JsonUtility
 import com.tabka.backblog.utilities.DesignUtility
 import java.util.UUID
@@ -60,7 +61,7 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
         // TODO "Check if user is authenticated"
         // var logsMap: Map<String, FireBase.LogObject> = emptyMap()
         // If not logged in
-        var logsMap: Map<String, JsonUtility.UserLog> = emptyMap()
+        var logsMap: Map<String, UserLog> = emptyMap()
 
         val logs = jsonUtility.readFromFile(requireContext())
         logsMap = logs.associateBy { it.id }
@@ -142,7 +143,7 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
         // If not logged in, write to JSON file
         val id = UUID.randomUUID().toString()
         val priority = (myDataset.maxByOrNull { it.priority }?.priority ?: 0) + 1
-        val log = JsonUtility.UserLog(
+        val log = UserLog(
             id = id,
             name = logName,
             is_visible = true,
