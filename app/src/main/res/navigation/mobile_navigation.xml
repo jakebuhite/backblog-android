@@ -15,10 +15,11 @@
         android:name="com.tabka.backblog.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" />
 
+    <!-- TODO: Change this to friends fragment, add handler for determining whether user is logged in -->
     <fragment
         android:id="@+id/navigation_friends"
-        android:name="com.tabka.backblog.ui.friends.FriendsFragment"
-        tools:layout="@layout/fragment_friends" />
+        android:name="com.tabka.backblog.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/dummy_fragment"

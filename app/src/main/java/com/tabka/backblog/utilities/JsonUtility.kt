@@ -3,18 +3,11 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.tabka.backblog.models.UserLog
 import java.io.IOException
 import java.lang.reflect.Type
 
 class JsonUtility : AppCompatActivity() {
-    data class UserLog(
-        val id: String,
-        val name: String,
-        val is_visible: Boolean,
-        val movie_ids: List<Int>,
-        val watched_ids: List<Int>,
-        val priority: Int,
-    )
 
     private val fileName = "logs.json"
     fun appendToFile(context: Context, newLog: UserLog) {
