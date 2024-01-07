@@ -2,12 +2,12 @@
     <string name="app_name">BackBlog</string>
     <string name="title_home">"What's Next?"</string>
     <string name="title_search">Search</string>
-    <string name="title_friends"></string>
+    <string name="title_friends">Friends</string>
     <string name="sign_up"><u>Sign up</u></string>
     <string name="backblog_logo">BackBlog logo</string>
     <string name="backblog">BackBlog</string>
     <string name="login_to_collaborate">Login to collaborate</string>
-    <string name="email_or_username">Email or Username</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="log_in">LOG IN</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
@@ -15,4 +15,9 @@
     <string name="sign_up_no_underline">Sign up</string>
     <string name="have_an_account">Have an account?</string>
     <string name="log_in_underline"><u>Log in</u></string>
+
+    <!-- Auth error handling -->
+    <string name="successful_log_in">Successfully signed in!</string>
+    <string name="successful_sign_up">Successfully signed up!</string>
+    <string name="fill_all_fields">Error: Please fill out all fields!</string>
 </resources>

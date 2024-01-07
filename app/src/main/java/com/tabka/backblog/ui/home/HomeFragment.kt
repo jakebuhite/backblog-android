@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tabka.backblog.R
@@ -44,24 +43,21 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 
         // Add Log PopUp Menu
-        val addLogButton: ImageView = root.findViewById(R.id.button_add_log);
+        val addLogButton: ImageView = root.findViewById(R.id.button_add_log)
         addLogButton.setOnClickListener {
-            showAddLogPopUpMenu();
+            showAddLogPopUpMenu()
         }
 
         // If logged in - set myDataset with data from db
         // TODO "Check if user is authenticated"
         // var logsMap: Map<String, FireBase.LogObject> = emptyMap()
         // If not logged in
-        var logsMap: Map<String, UserLog> = emptyMap()
+        var logsMap: Map<String, UserLog>
 
         val logs = jsonUtility.readFromFile(requireContext())
         logsMap = logs.associateBy { it.id }

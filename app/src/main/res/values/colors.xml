@@ -16,4 +16,7 @@
     <color name="bottomnav_icon_selected">@color/white</color>
 
     <color name="light_grey">#A7A9AB</color>
+
+    <color name="success">#4BB543</color>
+    <color name="error">#FF3333</color>
 </resources>
