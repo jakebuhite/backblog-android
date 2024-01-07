@@ -15,11 +15,39 @@
         android:name="com.tabka.backblog.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" />
 
-    <!-- TODO: Change this to friends fragment, add handler for determining whether user is logged in -->
     <fragment
         android:id="@+id/navigation_friends"
+        android:name="com.tabka.backblog.ui.friends.FriendsFragment"
+        tools:layout="@layout/fragment_friends">
+        <action
+            android:id="@+id/action_friends_fragment_to_login_fragment"
+            app:destination="@id/navigation_login"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_login"
         android:name="com.tabka.backblog.ui.login.LoginFragment"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_fragment_to_signup_fragment"
+            app:destination="@id/navigation_signup"
+            />
+        <action
+            android:id="@+id/action_login_fragment_to_friends_fragment"
+            app:destination="@id/navigation_friends"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_signup"
+        android:name="com.tabka.backblog.ui.login.SignupFragment"
+        tools:layout="@layout/fragment_signup">
+        <action
+            android:id="@+id/action_signup_fragment_to_login_fragment"
+            app:destination="@id/navigation_login"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/dummy_fragment"

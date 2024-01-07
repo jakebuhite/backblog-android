@@ -66,7 +66,7 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_or_username"
+                android:hint="@string/email"
                 android:layout_marginTop="20dp"
                 android:textColorHint="#bfbfbf"
                 app:boxStrokeColor="@color/white"
@@ -133,7 +133,7 @@
                 app:layout_constraintTop_toBottomOf="@id/login_button" />
 
             <Button
-                android:id="@+id/textButton"
+                android:id="@+id/btn_no_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_up"
@@ -144,6 +144,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/register_prompt" />
+
+            <TextView
+                android:id="@+id/status_message"
+                style="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/light_grey"
+                android:fontFamily="@font/inter_regular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_no_account" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

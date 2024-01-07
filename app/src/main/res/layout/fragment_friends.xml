@@ -8,7 +8,7 @@
     android:id="@+id/fragment_friends_parent">
 
     <TextView
-        android:id="@+id/text_notifications"
+        android:id="@+id/text_friends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

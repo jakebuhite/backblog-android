@@ -1,20 +1,12 @@
 package com.tabka.backblog
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.WindowManager
-import android.widget.ScrollView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.tabka.backblog.databinding.ActivityMainBinding
-import com.tabka.backblog.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +14,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // TESTING
+        val firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth.signOut()
 
         // Make the top bar of the android screen transparent
         window.apply {
@@ -39,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             val title = when (destination.id) {
                 R.id.navigation_home -> getString(R.string.title_home)
                 R.id.navigation_search -> getString(R.string.title_search)
-
                 else -> ""
             }
             binding.toolbarTitle.text = title
