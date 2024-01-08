@@ -17,7 +17,7 @@ import com.tabka.backblog.R
 import java.util.UUID
 
 class AddLogPopUpFragment : BottomSheetDialogFragment () {
-
+    private val TAG = "PopupFragment"
     var listener: DialogListener? = null
     interface DialogListener {
         fun onDialogCreateButtonClick(inputText: String)

@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.tabka.backblog.R
+import com.tabka.backblog.models.HomeImageItem
+import com.tabka.backblog.utils.DesignUtility
 import java.util.Collections
 
-data class ImageItem(val id: String, val image: Int, val log_name: String, var priority: Int)
-class GridAdapter(private val mData: List<ImageItem>,
+class GridAdapter(private val mData: List<HomeImageItem>,
                   private val customizeView: (ViewHolder, position: Int) -> Unit) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
     private val TAG = "Grid Adapter"
 
@@ -36,8 +37,6 @@ class GridAdapter(private val mData: List<ImageItem>,
     }
 
     fun onItemMove(fromPosition: Int, toPosition: Int) {
- /*       Collections.swap(mData, fromPosition, toPosition)
-        notifyItemMoved(fromPosition, toPosition)*/
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(mData, i, i + 1)
@@ -47,6 +46,7 @@ class GridAdapter(private val mData: List<ImageItem>,
                 Collections.swap(mData, i, i - 1)
             }
         }
+
         notifyItemMoved(fromPosition, toPosition)
 
         mData.forEachIndexed { index, imageItem ->
@@ -54,7 +54,8 @@ class GridAdapter(private val mData: List<ImageItem>,
         }
     }
 
-    fun getItems(): List<ImageItem> {
+
+    fun getItems(): List<HomeImageItem> {
         return mData
     }
     override fun getItemCount() = mData.size

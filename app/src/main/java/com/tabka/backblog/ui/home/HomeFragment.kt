@@ -4,7 +4,6 @@ package com.tabka.backblog.ui.home
 
 import android.annotation.SuppressLint
 import com.tabka.backblog.adapters.GridAdapter
-import com.tabka.backblog.adapters.ImageItem
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,11 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tabka.backblog.R
 import com.tabka.backblog.databinding.FragmentHomeBinding
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.tabka.backblog.adapters.DragManagerAdapter
+import com.tabka.backblog.databinding.FragmentSearchBinding
+import com.tabka.backblog.models.HomeImageItem
 import com.tabka.backblog.models.UserLog
-import com.tabka.backblog.utilities.JsonUtility
-import com.tabka.backblog.utilities.DesignUtility
+import com.tabka.backblog.ui.search.SearchViewModel
+import com.tabka.backblog.utils.JsonUtility
+import com.tabka.backblog.utils.DesignUtility
 import java.util.UUID
 
 class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
@@ -30,11 +35,11 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
     private val binding get() = _binding!!
 
     // Assuming you have a data source for your RecyclerView
-    private var myDataset: List<ImageItem> = emptyList()
-    private val jsonUtility = JsonUtility()
-    private val designUtility = DesignUtility()
+    private var myDataset: List<HomeImageItem> = emptyList()
 
-    // Adapter for the RecyclerView
+
+
+    private lateinit var homeViewModel: HomeViewModel
     private lateinit var gridAdapter: GridAdapter
 
     @SuppressLint("ResourceType")
@@ -43,9 +48,14 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        homeViewModel =
+            ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        homeViewModel.imageItemList.observe(viewLifecycleOwner, Observer { logs ->
+            setupRecyclerView(logs)
+        })
 
         // Add Log PopUp Menu
         val addLogButton: ImageView = root.findViewById(R.id.button_add_log)
@@ -53,25 +63,12 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
             showAddLogPopUpMenu()
         }
 
-        // If logged in - set myDataset with data from db
-        // TODO "Check if user is authenticated"
-        // var logsMap: Map<String, FireBase.LogObject> = emptyMap()
-        // If not logged in
-        var logsMap: Map<String, UserLog>
+        return root
+    }
 
-        val logs = jsonUtility.readFromFile(requireContext())
-        logsMap = logs.associateBy { it.id }
-        myDataset = logs.map { log ->
-            // Set default image if can't get image from TMDB
-            val imageResId = R.drawable.img_placeholder_log_batman
-            ImageItem(id=log.id, image=imageResId, log_name = log.name, priority = log.priority)
-        }.sortedBy { it.priority }
-
-
+    private fun setupRecyclerView(imageItems: List<HomeImageItem>) {
 
         val numColumns = 2
-
-        // Disable scrolling on the recycler view
         val recyclerView: RecyclerView = binding.myLogsRecycler
         recyclerView.layoutManager = object : GridLayoutManager(requireContext(), numColumns) {
             override fun canScrollVertically(): Boolean {
@@ -79,10 +76,10 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
             }
         }
 
-        // Dynamically add each log to home page
-        gridAdapter = GridAdapter(myDataset) { holder, position ->
+        gridAdapter = GridAdapter(imageItems) { holder, position ->
             val layoutParamsImage = holder.imageView.layoutParams
             val layoutParamsCard = holder.cardView.layoutParams as ViewGroup.MarginLayoutParams
+            val designUtility = DesignUtility()
 
             // Define margins based on position
             if (position % 2 == 0) {
@@ -108,23 +105,23 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
         }
         recyclerView.adapter = gridAdapter
 
+        createDraggableLogs(gridAdapter, recyclerView)
+    }
 
-        // Make items draggable
+    private fun createDraggableLogs(gridAdapter: GridAdapter, recyclerView: RecyclerView) {
+
         val callback = DragManagerAdapter(gridAdapter, recyclerView) { imageItems ->
-            val logs = imageItems.mapNotNull { item ->
-                val log = logsMap[item.id] ?: return@mapNotNull null
-                log.copy(priority = item.priority)
+            imageItems.forEachIndexed { index, imageItem ->
+                imageItem.priority = index
             }
-            // If not logged in
-            jsonUtility.overwriteJSON(requireContext(), logs)
-            //else send the list to firebase to update the priorities (should only need to send ID and priority)
+            // Call ViewModel method to update and save logs
+            homeViewModel.updatePrioritiesAndSaveLogs(imageItems)
         }
-
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerView)
 
-        return root
     }
+
 
     private fun showAddLogPopUpMenu() {
         val addLogPopUpFragment = AddLogPopUpFragment()
@@ -134,7 +131,8 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
 
     override fun onDialogCreateButtonClick(logName: String) {
         // Implement what should happen when the button is clicked
-        Log.d(TAG, "Create log for $logName")
+        homeViewModel.createLog(logName)
+/*        Log.d(TAG, "Create log for $logName")
 
         // If not logged in, write to JSON file
         val id = UUID.randomUUID().toString()
@@ -146,13 +144,14 @@ class HomeFragment : Fragment(), AddLogPopUpFragment.DialogListener {
             movie_ids = emptyList(),
             watched_ids = emptyList(),
             priority = priority,
-        )
+        )*/
 
-        jsonUtility.appendToFile(requireContext(), log)
-        activity?.recreate()
+        /*jsonUtility.appendToFile(log)*/
+        /*activity?.recreate()*/
 
         // else create log in firebase
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

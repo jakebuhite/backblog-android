@@ -1,4 +1,4 @@
-package com.tabka.backblog.utilities
+package com.tabka.backblog.utils
 
 import android.content.Context
 import android.util.TypedValue
