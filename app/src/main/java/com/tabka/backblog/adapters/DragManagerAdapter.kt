@@ -2,12 +2,13 @@ package com.tabka.backblog.adapters
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.tabka.backblog.models.HomeImageItem
 
 class DragManagerAdapter(
     private val adapter: GridAdapter,
     private val recyclerView: RecyclerView,
     /*    private val scrollView: ScrollView,*/
-    private val onMoveComplete: (List<ImageItem>) -> Unit
+    private val onMoveComplete: (List<HomeImageItem>) -> Unit
 ) : ItemTouchHelper.Callback() {
     override fun isLongPressDragEnabled(): Boolean {
         return true

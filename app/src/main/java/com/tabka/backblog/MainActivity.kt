@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.tabka.backblog.databinding.ActivityMainBinding
+import com.tabka.backblog.repos.local_storage.LogsLocalRepo
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +15,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize Repo for local storage calls
+        LogsLocalRepo.init(this)
 
         // TESTING
         val firebaseAuth = FirebaseAuth.getInstance()

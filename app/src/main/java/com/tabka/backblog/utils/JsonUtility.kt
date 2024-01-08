@@ -1,4 +1,4 @@
-package com.tabka.backblog.utilities
+package com.tabka.backblog.utils
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
@@ -7,12 +7,14 @@ import com.tabka.backblog.models.UserLog
 import java.io.IOException
 import java.lang.reflect.Type
 
-class JsonUtility : AppCompatActivity() {
+class JsonUtility(context: Context) : AppCompatActivity() {
 
     private val fileName = "logs.json"
-    fun appendToFile(context: Context, newLog: UserLog) {
+    private val context: Context = context
+    fun appendToFile(newLog: UserLog) {
+
         // Read existing content
-        val existingLogs = readFromFile(context)
+        val existingLogs = readFromFile()
 
         // Add the new log to the list
         existingLogs.add(newLog)
@@ -26,7 +28,7 @@ class JsonUtility : AppCompatActivity() {
         }
     }
 
-    fun readFromFile(context: Context): MutableList<UserLog> {
+    fun readFromFile(): MutableList<UserLog> {
         val fileContents = try {
             context.openFileInput(fileName).bufferedReader().use { it.readText() }
         } catch (e: IOException) {
@@ -46,7 +48,7 @@ class JsonUtility : AppCompatActivity() {
         }
     }
 
-    fun overwriteJSON(context: Context, logs: List<UserLog>) {
+    fun overwriteJSON(logs: List<UserLog>) {
         val json = Gson().toJson(logs)
         context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(json.toByteArray())
